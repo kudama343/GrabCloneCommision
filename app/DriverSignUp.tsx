@@ -1,8 +1,41 @@
-import React from 'react';
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
 import { useRouter } from 'expo-router'; // Import useRouter for navigation
+import { supabase } from './SupaBaseConfig';
 
-export default function DriverLogin() {
+export default function DriverSignUp() {
+  const router = useRouter(); // Initialize the router
+
+  // State variables for the form inputs
+  const [fullname, setFullname] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  // Function to handle the Sign Up button click
+  const handleSignUp = async () => {
+    if (fullname && username && password) {
+      try {
+        const { data, error } = await supabase
+          .from('grab_driver') // Table name
+          .insert([
+            { fullname, username, password } // Column names in your Supabase table
+          ]);
+
+        if (error) {
+          throw error;
+        }
+
+        // If successful, show an alert and navigate or reset the form
+        Alert.alert('Success', 'Account created successfully!');
+        router.push('/DriverLogin'); // Navigate to the next screen if necessary
+      } catch (error) {
+        
+      }
+    } else {
+      Alert.alert('Validation Error', 'Please fill in all fields');
+    }
+  };
+
   return (
     <View style={styles.container}>
       {/* Logo */}
@@ -14,11 +47,21 @@ export default function DriverLogin() {
 
       {/* Full Name Input */}
       <Text style={styles.label}>Full Name</Text>
-      <TextInput style={styles.input} placeholder="Enter Full Name" />
+      <TextInput
+        style={styles.input}
+        placeholder="Enter Full Name"
+        value={fullname}
+        onChangeText={setFullname} // Update the state
+      />
 
       {/* Username Input */}
       <Text style={styles.label}>Username</Text>
-      <TextInput style={styles.input} placeholder="Enter Username" />
+      <TextInput
+        style={styles.input}
+        placeholder="Enter Username"
+        value={username}
+        onChangeText={setUsername} // Update the state
+      />
 
       {/* Password Input */}
       <Text style={styles.label}>Password</Text>
@@ -26,11 +69,13 @@ export default function DriverLogin() {
         style={styles.input}
         placeholder="Enter Password"
         secureTextEntry={true}
+        value={password}
+        onChangeText={setPassword} // Update the state
       />
 
 
-      {/* Login Button */}
-      <TouchableOpacity style={styles.loginButton}>
+      {/* Sign Up Button */}
+      <TouchableOpacity style={styles.loginButton} onPress={handleSignUp}>
         <Text style={styles.loginButtonText}>Sign Up</Text>
       </TouchableOpacity>
     </View>

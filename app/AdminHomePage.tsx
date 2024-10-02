@@ -4,7 +4,7 @@ import  Slider  from '@react-native-community/slider';
 import { AntDesign } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
-const AdminScreen = () => {
+export default function AdminHomePage ()  {
   const router = useRouter();
   const [ratePerDistance, setRatePerDistance] = useState(50);
   const [companyShares, setCompanyShares] = useState(10);
@@ -200,4 +200,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AdminScreen;
+

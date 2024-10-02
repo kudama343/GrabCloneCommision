@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-nativ
 import MapView from 'react-native-maps';
 import { useRouter } from 'expo-router';
 
-export default function App() {
+export default function DriverStepOneMapPage() {
   const router = useRouter(); 
   return (
     <View style={styles.container}>

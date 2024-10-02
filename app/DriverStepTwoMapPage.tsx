@@ -3,13 +3,13 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-nativ
 import MapView from 'react-native-maps';
 import { useRouter } from 'expo-router';
 
-export default function App() {
+export default function DriverStepTwoMapPage() {
   const router = useRouter(); 
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={() => router.push('/DriverStepTwoMapPage')}>
+        <TouchableOpacity style={styles.backButton} onPress={() => router.push('/DriverStepOneMapPage')}>
           <Text style={styles.backButtonText}>←</Text>
         </TouchableOpacity>
       </View>

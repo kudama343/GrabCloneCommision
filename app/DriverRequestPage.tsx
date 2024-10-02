@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 
-export default function ConfirmationScreen() {
+export default function DriverRequestPage() {
   const router = useRouter(); 
   return (
     <View style={styles.container}>

@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-nati
 import { MaterialIcons } from '@expo/vector-icons'; // Assuming you're using Expo, otherwise install react-native-vector-icons
 import { useRouter } from 'expo-router';
 
-export default function HomeScreen() {
+export default function CustomerHomePage() {
   const router = useRouter(); 
   return (
     <View style={styles.container}>
