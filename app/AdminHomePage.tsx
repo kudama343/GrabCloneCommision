@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Modal, StyleSheet, Pressable} from 'react-native';
-import  Slider  from '@react-native-community/slider';
+import { View, Text, TextInput, Button, Modal, StyleSheet, Pressable, Alert } from 'react-native';
+import Slider from '@react-native-community/slider';
 import { AntDesign } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { supabase } from './SupaBaseConfig'; // Import the initialized Supabase client
 
-export default function AdminHomePage ()  {
+
+export default function AdminHomePage() {
   const router = useRouter();
   const [ratePerDistance, setRatePerDistance] = useState(50);
   const [companyShares, setCompanyShares] = useState(10);
@@ -25,13 +27,30 @@ export default function AdminHomePage ()  {
   };
 
   const confirmLogout = () => {
-    // Handle logout logic here
     console.log('Logged out');
     setModalVisible(false);
   };
 
   const cancelLogout = () => {
     setModalVisible(false);
+  };
+
+  // Function to update the table
+  const updateDatabase = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('grab_price_info')
+        .update({ rate: ratePerDistance, share: companyShares })
+        .eq('admin_key', 'master');
+
+      if (error) {
+        throw error;
+      }
+      
+      Alert.alert('Success', 'Price info updated successfully');
+    } catch (error) {
+      Alert.alert('Error', 'Failed to update price info');
+    }
   };
 
   return (
@@ -76,7 +95,7 @@ export default function AdminHomePage ()  {
       />
 
       {/* Apply button */}
-      <Pressable style={styles.applyButton}>
+      <Pressable style={styles.applyButton} onPress={updateDatabase}>
         <Text style={styles.applyButtonText}>Apply</Text>
       </Pressable>
 
@@ -103,7 +122,7 @@ export default function AdminHomePage ()  {
       </Modal>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -199,5 +218,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
-

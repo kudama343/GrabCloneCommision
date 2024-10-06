@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons'; // Assuming you're using Expo, otherwise install react-native-vector-icons
 import { useRouter } from 'expo-router';
 
 export default function CustomerOptionPage() {
   const router = useRouter(); 
+  // State variables for the form inputs
+  const [option, setOption] = useState('');
+
+  const backRideOption = () => {
+    setOption('Back Ride');
+    router.push('/CustomerDeliveryMapPage');
+  };
+
+  const deliveryOption = () => {
+    setOption('Delivery');
+    router.push('/CustomerDeliveryMapPage');
+  };
+
   return (
     <View style={styles.container}>
         <View style={styles.headerBackbtn}>
@@ -17,14 +29,14 @@ export default function CustomerOptionPage() {
         <Text style={styles.headerText}>Options</Text>
       </View>
 
-      <TouchableOpacity style={styles.optionBtns} onPress={() => router.push('/CustomerDeliveryMapPage')}>
+      <TouchableOpacity style={styles.optionBtns} onPress={deliveryOption}>
         <Text style={styles.optionBtnsText}>Delivery</Text>
         <View >
         <Text style={styles.optionBtnsTextContent}>for transportation of products from a supplier to a customer.</Text>
       </View>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.optionBtns} onPress={() => router.push('/CustomerDeliveryMapPage')}>
+      <TouchableOpacity style={styles.optionBtns} onPress={backRideOption}>
         <Text style={styles.optionBtnsText}>Back Ride</Text>
         <View >
         <Text style={styles.optionBtnsTextContent}>passenger sitting behind a driver on a motorcycle, being transported to their destination.</Text>

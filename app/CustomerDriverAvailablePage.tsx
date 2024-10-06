@@ -1,42 +1,67 @@
-import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons'; // Assuming you're using Expo, otherwise install react-native-vector-icons
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
+import { supabase } from './SupaBaseConfig'; // Import the initialized Supabase client
 
 export default function CustomerDriverAvailablePage() {
   const router = useRouter(); 
+  const [drivers, setDrivers] = useState([]);
+  const [selectedDriver, setSelectedDriver] = useState(null); // Temporary state for storing selected driver
+
+  useEffect(() => {
+    // Fetch the driver names from Supabase
+    const fetchDrivers = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('grab_driver')
+          .select('fullname')
+          .eq('status', 'active');
+
+        if (error) {
+          throw error;
+        }
+
+        setDrivers(data); // Set the fetched drivers in state
+      } catch (error) {
+        Alert.alert('Error', error.message); // Display error if fetch fails
+      }
+    };
+
+    fetchDrivers();
+  }, []);
+
+  // Function to handle driver selection
+  const handleDriverSelect = (driver) => {
+    setSelectedDriver(driver); // Store selected driver in state
+    console.log('Selected driver:', driver); // Log for testing
+    router.push('/CustomerPaymentPage'); 
+  };
+
   return (
     <View style={styles.container}>
-        <View style={styles.headerBackbtn}>
-        <TouchableOpacity style={styles.backButton} onPress={() => router.push('/CustomerDeliveryMapPage')}>
-          <Text style={styles.backButtonText}>←</Text>
-        </TouchableOpacity>
-        </View>
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerText}>Driver</Text>
       </View>
 
-      {/* Orders Section */}
+      {/* Drivers Section */}
       <View style={styles.ordersContainer}>
-        <Text style={styles.ordersTitle}>Available</Text>
+        <Text style={styles.ordersTitle}>Available Drivers</Text>
 
         <ScrollView>
-          {/* Order Details */}
-          <View style={styles.orderCard}>
-            <Text style={styles.orderText}>Driver 1</Text>
-          </View>
-          <View style={styles.orderCard}>
-            <Text style={styles.orderText}>Driver 2</Text>
-          </View>
-         
+          {/* Render the list of drivers */}
+          {drivers.map((driver, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.orderCard}
+              onPress={() => handleDriverSelect(driver.fullname)}
+            >
+              <Text style={styles.orderText}>{driver.fullname}</Text>
+            </TouchableOpacity>
+          ))}
         </ScrollView>
       </View>
 
-    {/* Next Button */}
-    <TouchableOpacity style={styles.nextButton} onPress={() => router.push('/CustomerPaymentPage')}>
-        <Text style={styles.nextButtonText}>Next</Text>
-    </TouchableOpacity>
       
     </View>
   );
@@ -78,28 +103,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
   },
-  headerBackbtn: {
-    backgroundColor: '#FFA726',
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-  },
-  backButton: {
-    paddingHorizontal: 10,
-  },
-  backButtonText: {
-    fontSize: 24,
-    color: '#fff',
-  },
-  nextButton: {
-    backgroundColor: '#FFA500',
-    padding: 15,
+  selectedDriverContainer: {
+    padding: 20,
+    backgroundColor: '#e0e0e0',
     borderRadius: 8,
+    marginTop: 20,
     alignItems: 'center',
-    margin: 15
   },
-  nextButtonText: {
-    color: '#fff',
+  selectedDriverText: {
     fontSize: 18,
     fontWeight: 'bold',
   },

@@ -1,10 +1,26 @@
-import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons'; // Assuming you're using Expo, otherwise install react-native-vector-icons
+import React, { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 
 export default function CustomerPaymentPage() {
   const router = useRouter(); 
+
+  
+  const [selectedPaymentOption, setSelectedPaymentOption] = useState(''); // Temporary state for storing selected driver
+
+  // Function to handle driver selection
+  const cashPayment = () => {
+    setSelectedPaymentOption(selectedPaymentOption); // Store selected driver in state
+    console.log('Selected Payment Option:', 'Cash'); // Log for testing
+    router.push('/CustomerConfirmationPage'); 
+  };
+
+  const gcashPayment = () => {
+    setSelectedPaymentOption('GCash'); // Store selected driver in state
+    console.log('Selected Payment Option:', selectedPaymentOption); // Log for testing
+    router.push('/CustomerConfirmationPage'); 
+  };
+
   return (
     <View style={styles.container}>
         <View style={styles.headerBackbtn}>
@@ -23,13 +39,13 @@ export default function CustomerPaymentPage() {
 
             
           <View>
-            <TouchableOpacity style={styles.orderCard} >
+            <TouchableOpacity style={styles.orderCard} onPress={cashPayment}>
                 <Text style={styles.orderText}>Cash</Text>
             </TouchableOpacity>
           </View>
           
           <View>
-            <TouchableOpacity style={styles.orderCard} >
+            <TouchableOpacity style={styles.orderCard} onPress={gcashPayment}>
                 <Text style={styles.orderText}>GCash</Text>
             </TouchableOpacity>
           </View>
@@ -37,10 +53,7 @@ export default function CustomerPaymentPage() {
        
       </View>
 
-    {/* Next Button */}
-    <TouchableOpacity style={styles.nextButton} onPress={() => router.push('/CustomerConfirmationPage')}>
-        <Text style={styles.nextButtonText}>Next</Text>
-    </TouchableOpacity>
+
       
     </View>
   );
